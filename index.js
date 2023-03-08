@@ -60,7 +60,7 @@ app.get('/messages/:userId', async (req, res) => {
     }).sort({ createdAt: 1 });
     res.json(messages);
   } catch (err) {
-    console.log(err);
+    console.log("Get message", err);
   }
 });
 
