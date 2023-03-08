@@ -93,8 +93,6 @@ app.post('/login', async (req, res) => {
         } else {
           res.cookie('token', token, { sameSite: 'none', secure: true }).json({
             id: foundUser._id,
-          }, (err) => {
-            console.log(err)
           });
         }
       });
