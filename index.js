@@ -50,19 +50,27 @@ app.get('/test', (req, res) => {
 });
 
 app.get('/messages/:userId', async (req, res) => {
-  const { userId } = req.params;
-  const userData = await getUserDataFromRequest(req);
-  const ourUserId = userData.userId;
-  const messages = await Message.find({
-    sender: { $in: [userId, ourUserId] },
-    recipient: { $in: [userId, ourUserId] },
-  }).sort({ createdAt: 1 });
-  res.json(messages);
+  try {
+    const { userId } = req.params;
+    const userData = await getUserDataFromRequest(req);
+    const ourUserId = userData.userId;
+    const messages = await Message.find({
+      sender: { $in: [userId, ourUserId] },
+      recipient: { $in: [userId, ourUserId] },
+    }).sort({ createdAt: 1 });
+    res.json(messages);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.get('/people', async (req, res) => {
-  const users = await User.find({}, { '_id': 1, username: 1 });
-  res.json(users);
+  try {
+    const users = await User.find({}, { '_id': 1, username: 1 });
+    res.json(users);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.get('/profile', (req, res) => {
@@ -84,9 +92,13 @@ app.post('/login', async (req, res) => {
     const passOk = bcrypt.compareSync(password, foundUser.password);
     if (passOk) {
       jwt.sign({ userId: foundUser._id, username }, jwtSecret, {}, (err, token) => {
-        res.cookie('token', token, { sameSite: 'none', secure: true }).json({
-          id: foundUser._id,
-        });
+        if (err) {
+          console.log(err);
+        } else {
+          res.cookie('token', token, { sameSite: 'none', secure: true }).json({
+            id: foundUser._id,
+          });
+        }
       });
     }
   }
