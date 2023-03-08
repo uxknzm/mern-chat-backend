@@ -160,21 +160,21 @@ wss.on('connection', (connection, req) => {
   });
 
   // read username and id form the cookie for this connection
-  const cookies = req.headers.cookie;
-  if (cookies) {
-    const tokenCookieString = cookies.split(';').find(str => str.startsWith('token='));
-    if (tokenCookieString) {
-      const token = tokenCookieString.split('=')[1];
-      if (token) {
-        jwt.verify(token, jwtSecret, {}, (err, userData) => {
-          if (err) throw err;
-          const { userId, username } = userData;
-          connection.userId = userId;
-          connection.username = username;
-        });
-      }
-    }
-  }
+  // const cookies = req.headers.cookie;
+  // if (cookies) {
+  //   const tokenCookieString = cookies.split(';').find(str => str.startsWith('token='));
+  //   if (tokenCookieString) {
+  //     const token = tokenCookieString.split('=')[1];
+  //     if (token) {
+  //       jwt.verify(token, jwtSecret, {}, (err, userData) => {
+  //         if (err) throw err;
+  //         const { userId, username } = userData;
+  //         connection.userId = userId;
+  //         connection.username = username;
+  //       });
+  //     }
+  //   }
+  // }
 
   connection.on('message', async (message) => {
     const messageData = JSON.parse(message.toString());
