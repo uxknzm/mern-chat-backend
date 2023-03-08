@@ -25,7 +25,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://mern-chat-frontend-kappa.vercel.app' || "http://localhost:3000", //or whatever port your frontend is using
+  origin: "http://localhost:3000", //or whatever port your frontend is using
   credentials: true,
   optionSuccessStatus: 200
 }));
