@@ -29,14 +29,22 @@ app.use(cors({
   credentials: true,
   optionSuccessStatus: 200
 }));
+app.all('*', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.headers.origin); // Переход от исходного * к источнику текущего запроса
+  res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,token");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("Content-Type", "application/json;charset=utf-8");
+  res.header("Access-Control-Allow-Credentials", true); // Разрешить отправку файлов cookie
+  next();
+});
 
 async function getUserDataFromRequest(req) {
   return new Promise((resolve, reject) => {
     const token = req.cookies?.token;
-      jwt.verify(token, jwtSecret, {}, (err, userData) => {
-        if (err) throw err;
-        resolve(userData);
-      });
+    jwt.verify(token, jwtSecret, {}, (err, userData) => {
+      if (err) throw err;
+      resolve(userData);
+    });
   });
 
 }
